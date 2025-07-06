@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nomor Target Disadap</title>
+  <style>
+    body {
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2rem;
+      border: 2px solid #00ff00;
+      background: transparent;
+      color: #00ff00;
+      width: 300px;
+      text-align: center;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #00ff00;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00cc00;
+    }
+    .virus, .error-text {
+      position: absolute;
+      font-size: 2rem;
+      color: red;
+      animation: fly 4s linear infinite;
+    }
+    .error-text {
+      font-size: 3rem;
+      color: #ff0000;
+      animation: glitch 0.2s infinite;
+    }
+    @keyframes fly {
+      0% { top: -10%; left: 50%; opacity: 0; }
+      50% { opacity: 1; }
+      100% { top: 110%; left: calc(100% * var(--rand)); opacity: 0; }
+    }
+    @keyframes glitch {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-5px, 5px); }
+      50% { transform: translate(5px, -5px); }
+      75% { transform: translate(-5px, -5px); }
+      100% { transform: translate(5px, 5px); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Masukkan Nomor Target yang Ingin Disadap</h1>
+  <input type="text" id="targetNumber" placeholder="Contoh: 081234567890">
+  <button onclick="submitTarget()">Submit</button>  <!-- Suara sirine --><audio id="siren" src="siren.mp3" preload="auto"></audio>
+
+  <script>
+    function submitTarget() {
+      const number = document.getElementById("targetNumber").value.trim();
+      if (!number) {
+        alert("Silakan masukkan nomor terlebih dahulu.");
+        return;
+      }
+      alert("Nomor target disimpan: " + number);
+      showFakeTrace(number);
+    }
+
+    function showFakeTrace(number) {
+      let step = 0;
+      const messages = [
+        `📡 Menyambungkan ke ${number}...`,
+        "📶 Menganalisis jaringan...",
+        "🔍 Mendeteksi lokasi...",
+        "🛰️ Koordinat ditemukan: -6.2xx, 106.8xx",
+        "💾 Mengakses kontak, galeri, dan aplikasi...",
+        "✅ Data berhasil dikumpulkan."
+      ];
+
+      const interval = setInterval(() => {
+        if (step < messages.length) {
+          alert(messages[step]);
+          step++;
+        } else {
+          clearInterval(interval);
+          triggerVirusBrutal();
+        }
+      }, 1300);
+    }
+
+    function triggerVirusBrutal() {
+      const siren = document.getElementById("siren");
+      siren.volume = 1.0;
+      siren.play().catch(() => {});
+
+      // Tambahkan error teks besar di tengah layar
+      const error = document.createElement('div');
+      error.className = 'error-text';
+      error.textContent = '⚠️ SYSTEM ERROR DETECTED';
+      error.style.top = '40%';
+      error.style.left = '10%';
+      document.body.appendChild(error);
+
+      // Tambahkan virus terbang
+      for (let i = 0; i < 40; i++) {
+        const span = document.createElement('span');
+        span.className = 'virus';
+        span.textContent = '⚠️ VIRUS DETECTED';
+        span.style.top = Math.random() * 100 + '%';
+        span.style.left = Math.random() * 100 + '%';
+        span.style.setProperty('--rand', Math.random());
+        document.body.appendChild(span);
+      }
+
+      // Efek berkedip background merah hitam
+      let flash = 0;
+      const flashInterval = setInterval(() => {
+        document.body.style.backgroundColor = flash % 2 === 0 ? 'darkred' : 'black';
+        flash++;
+        if (flash > 30) clearInterval(flashInterval);
+      }, 150);
+    }
+
+    // Autoplay fix: aktifkan audio saat klik pertama
+    document.addEventListener("click", () => {
+      const s = document.getElementById("siren");
+      if (s && s.paused) s.play().catch(() => {});
+    });
+  </script></body>
+</html>
